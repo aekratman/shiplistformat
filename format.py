@@ -1,6 +1,6 @@
 def open_file(filename):
-  file = open(filename, "r")
-  lines = file.read().getlines()
-  return lines
+    with open(filename, "r") as f:
+        all_lines = f.readlines()
+    return all_lines
 
-open_file(filename="4_30.txt")
+open_file(filename="/Users/abbeykratman/Downloads/4_30.txt")
