@@ -1,45 +1,75 @@
-import random 
-
+import random
 
 def open_file(filename):
     with open(filename, "r") as f:
         all_lines = f.readlines()
     return all_lines
 
+def replace_line(lines, line_number, new_line):
+    if 0 < line_number <= len(lines):
+        lines[line_number - 1] = new_line + "\n"  # Adjust line number to 0-based index
+    else:
+        print("Invalid line number.")
+
 def editor(lines):
+    modified_lines = []  # Initialize an empty list to store modified lines
     index_shiplist = -1
-        
+
+    # Find the index where "Weekly Shiplist for Wednesday" appears
     for i, line in enumerate(lines):
         if "Weekly Shiplist for Wednesday" in line:
-            index_shiplist = i
-            del lines[:index_shiplist] 
-            i = 0
-            lines.insert(i + 1, '</b></u></em>')
-            lines.insert(i, '<b><u><em>DC/Lunar Shortages</b></u></em><ul></ul><br><br><b><u><em>Diamond Shortages</b></u></em><ul></ul><br><br><b><u><em>Delayed by Diamond</b></u></em><ul></ul><br><br><b><u><em>')  
+                index_shiplist = i  # Store the index of the first occurrence
+                       # Replace the line with the desired format
+                print(lines[i])
+                html_start = "<b><u><em>DC/Lunar Shortages</b></u></em><ul></ul><br><br><b><u><em>Diamond Shortages</b></u></em><ul></ul><br><br><b><u><em>Delayed by Diamond</b></u></em><ul></ul><br><br><b><u><em>"
+                new_line = "Weekly Shiplist for Wednesday, DD MM YYYY"
+                lines.insert(i + 2, '</b></u></em>')     
+                replace_line(lines, i, html_start + new_line)
+                replace_line(lines, i + 1, "")
+                for i, line in enumerate(lines):
+                    if i != index_shiplist and "Weekly Shiplist for Wednesday" in line:
+                        replace_line(lines, i, "Hello!")
+                        break
+                print(f"Line replaced at index {i}: {new_line}")  # Debugging print
+                # Delete lines before the modified line
+                del lines[:i]
+                break
+
+    # Find the index where "DC/Lunar Shiplist for Wednesday," appears
+    for t, line in enumerate(lines):
+        if "DC/Lunar Shiplist for Wednesday," in line:  
+            html_start2 = "<b><u><em>"    
+            replace_line(lines, t, html_start2 + "DC/Lunar Shiplist for Wednesday, DD MM YYYY </b></em></u>")
+            replace_line(lines, t + 1, "")
+
+            print(lines[t])  # Print the modified line
             break
 
-    for i, line in enumerate(lines):  
-        lines[i] = '<br>' + line.strip()  # Corrected from lines[i]
-        if "Weekly Shiplist for Wednesday" in line:
-            start = i + 8
-            lines[i] = line.replace(line, "Weekly Shiplist for Wednesday, DD MM YYYY")  # Corrected from lines[i]
-            print("Replacement happened!")
+    # Add '<br>' to the beginning of lines if not already present
+    for line in lines:  
+        if not line.strip().startswith('<br>'):
+            modified_lines.append('<br>' + line.strip())
+        else:
+            modified_lines.append(line.strip())
 
-    return lines
+    print("Editor changes applied successfully.")
+    return modified_lines  # Return the modified lines
 
-   
+
+
 def random_add(lines):
+    # Find the index where "Weekly Shiplist for Wednesday" appears
     start = None
-    end = None
     for i, line in enumerate(lines):
         if "Weekly Shiplist for Wednesday" in line:
-            start = i + 8
-            lines[i] = line.replace(line, "Weekly Shiplist for Wednesday, DD MM YYYY")
-            print(lines[i], "Replacement happened!")
+            start = i + 3
+            break
+
+    # Find the index where "DC/Lunar Shiplist for Wednesday," appears
+    end = None
+    for i, line in enumerate(lines):
         if "DC/Lunar Shiplist for Wednesday," in line:
-            end = i - 8
-            lines[i] = line.replace(line, "DC/Lunar Shiplist for Wednesday,  DD MM YYYY")
-            print(lines[i], "Replacement happened!")
+            end = i
             break
     prev_indices = []  # Keep track of previously chosen indices
     if start is not None and end is not None:
@@ -48,11 +78,14 @@ def random_add(lines):
             while any(abs(chosen_index - prev_index) <= 3 for prev_index in prev_indices):
                 chosen_index = random.randint(start, end)
             lines.insert(chosen_index - 1, '<br><br><b>')
-            lines.insert(chosen_index + 1, '</b><ul> TESTING     <em></em></ul><br>')
+            lines.insert(chosen_index + 1, '</b><ul>\n<em>TESTING</em></ul><br>')
             line_to_print = lines[chosen_index].replace("<br>", "")
             print(line_to_print + " previewsworld \n")
             lines[chosen_index] = lines[chosen_index].replace("<br>", "")
             prev_indices.append(chosen_index)
+
+    print("Random additions applied successfully.")
+    return lines
 
 
 from datetime import datetime, timedelta
@@ -71,12 +104,8 @@ def next_wednesday():
     return f"{month_name} {next_wednesday_date.day} {next_wednesday_date.year}"
 
 
-
-import sys
-from datetime import datetime
-
 def runFile(uploadedFile):
-    print("Running.")
+    #print("Running.")
     input_filename = uploadedFile
     output_filename = "processed_output.txt"
    
@@ -84,19 +113,33 @@ def runFile(uploadedFile):
         with open(input_filename, "r") as input_file:
             file_content = input_file.readlines()  # Read lines into a list
         current_date = datetime.now().strftime("%d %m %Y")
-        file_content = [line.replace("DD MM YYYY", next_wednesday()) for line in file_content]  # Replace date
-        modified_lines = editor(file_content)  # Apply editor modifications
-        random_add(modified_lines)  # Apply random additions
+        
+        # Apply editor modifications
+        modified_lines = editor(file_content)  
+        
+        # Apply random additions
+        modified_lines = random_add(modified_lines)  
+        
+        # Replace "DD MM YYYY" with the next Wednesday's date
+        modified_lines = [line.replace("DD MM YYYY", next_wednesday()) for line in modified_lines]
+
         modified_content = '\n'.join(modified_lines)  # Join lines into a single string
         with open(output_filename, "w") as output_file:
             output_file.write(modified_content)  # Write modified content to the output file
        
-        print("File processed successfully.")
-        print("Processed output saved in:", output_filename)
+        #print("File processed successfully.")
+       # print("Processed output saved in:", output_filename)
     except FileNotFoundError:
         print("File not found:", input_filename)
     except Exception as e:
         print("An error occurred during file processing:", str(e))
 
-    print("End of function")  # Add this line to check if the function completes execution
+    #print("End of function")  # Add this line to check if the function completes execution
 
+if __name__ == "__main__":
+    import sys
+    if len(sys.argv) != 2:
+        print("Usage: python script.py <filename>")
+    else:
+        uploadedFile = sys.argv[1]
+        runFile(uploadedFile)
