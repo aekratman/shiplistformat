@@ -21,29 +21,47 @@ def editor(lines):
                 index_shiplist = i  # Store the index of the first occurrence
                        # Replace the line with the desired format
                 print(lines[i])
-                html_start = "<b><u><em>DC/Lunar Shortages</b></u></em><ul></ul><br><br><b><u><em>Diamond Shortages</b></u></em><ul></ul><br><br><b><u><em>Delayed by Diamond</b></u></em><ul></ul><br><br><b><u><em>"
+                html_start = "<b><u><em>"
                 new_line = "Weekly Shiplist for Wednesday, DD MM YYYY"
                 lines.insert(i + 2, '</b></u></em>')     
                 replace_line(lines, i, html_start + new_line)
                 replace_line(lines, i + 1, "")
                 for i, line in enumerate(lines):
                     if i != index_shiplist and "Weekly Shiplist for Wednesday" in line:
-                        replace_line(lines, i, "Hello!")
+                        replace_line(lines, i, "")
                         break
                 print(f"Line replaced at index {i}: {new_line}")  # Debugging print
-                # Delete lines before the modified line
-                del lines[:i]
                 break
 
     # Find the index where "DC/Lunar Shiplist for Wednesday," appears
-    for t, line in enumerate(lines):
+    for d, line in enumerate(lines):
         if "DC/Lunar Shiplist for Wednesday," in line:  
             html_start2 = "<b><u><em>"    
-            replace_line(lines, t, html_start2 + "DC/Lunar Shiplist for Wednesday, DD MM YYYY </b></em></u>")
-            replace_line(lines, t + 1, "")
+            replace_line(lines, d, html_start2 + "DC/Lunar Shiplist for Wednesday, DD MM YYYY </b></em></u>")
+            replace_line(lines, d + 1, "")
+
+            print(lines[d])  # Print the modified line
+            break
+
+    for t, line in enumerate(lines):
+        if "DC/Lunar Shortages" in line:  
+            html_start2 = "<b><u><em>"    
+            replace_line(lines, t + 1, html_start2 + lines[t] + "</b></em></u>")
 
             print(lines[t])  # Print the modified line
-            break
+            
+        if "Delayed by Diamond" in line:  
+            html_start2 = "<b><u><em>"    
+            replace_line(lines, t + 1, html_start2 + "Delayed by Diamond </b></em></u>")
+
+            print(lines[t + 1])  # Print the modified line
+            
+        if "Diamond Shortages" in line:  
+            html_start2 = "<b><u><em>"    
+            replace_line(lines, t + 1, html_start2 + "Diamond Shortages </b></em></u>")
+
+            print(lines[t + 1])  # Print the modified line
+            
 
     # Add '<br>' to the beginning of lines if not already present
     for line in lines:  
@@ -80,7 +98,7 @@ def random_add(lines):
             lines.insert(chosen_index - 1, '<br><br><b>')
             lines.insert(chosen_index + 1, '</b><ul>\n<em>TESTING</em></ul><br>')
             line_to_print = lines[chosen_index].replace("<br>", "")
-            print(line_to_print + " previewsworld \n")
+           # print(line_to_print + " previewsworld \n")
             lines[chosen_index] = lines[chosen_index].replace("<br>", "")
             prev_indices.append(chosen_index)
 
