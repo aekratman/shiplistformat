@@ -34,10 +34,12 @@ def random_add(lines):
     for i, line in enumerate(lines):
         if "Weekly Shiplist for Wednesday" in line:
             start = i + 8
+            lines[i].replace(lines[i], "Weekly Shiplist for Wednesday, DD MM YYYY");
             
 
         if "DC/Lunar Shiplist for Wednesday," in line:
             end = i - 8
+            lines[i].replace(lines[i], "DC/Lunar Shiplist for Wednesday, DD MM YYYY");
             break
            
     prev_indices = []  # Keep track of previously chosen indices
