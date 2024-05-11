@@ -6,9 +6,7 @@ def open_file(filename):
         all_lines = f.readlines()
     return all_lines
 
-
 def editor(lines):
-    
     index_shiplist = -1
         
     for i, line in enumerate(lines):
@@ -21,55 +19,41 @@ def editor(lines):
             break
 
     for i, line in enumerate(lines):  
-        lines[i] = '<br>' + lines[i].strip()
+        lines[i] = '<br>' + line.strip()  # Corrected from lines[i]
+        if "Weekly Shiplist for Wednesday" in line:
+            start = i + 8
+            lines[i] = line.replace(line, "Weekly Shiplist for Wednesday, DD MM YYYY")  # Corrected from lines[i]
+            print("Replacement happened!")
 
     return lines
 
    
 def random_add(lines):
-    
-    i = 2
-    
-    
+    start = None
+    end = None
     for i, line in enumerate(lines):
         if "Weekly Shiplist for Wednesday" in line:
             start = i + 8
-            lines[i].replace(lines[i], "Weekly Shiplist for Wednesday, DD MM YYYY");
-            
-
+            lines[i] = line.replace(line, "Weekly Shiplist for Wednesday, DD MM YYYY")
+            print(lines[i], "Replacement happened!")
         if "DC/Lunar Shiplist for Wednesday," in line:
             end = i - 8
-            lines[i].replace(lines[i], "DC/Lunar Shiplist for Wednesday, DD MM YYYY");
+            lines[i] = line.replace(line, "DC/Lunar Shiplist for Wednesday,  DD MM YYYY")
+            print(lines[i], "Replacement happened!")
             break
-           
     prev_indices = []  # Keep track of previously chosen indices
-    
-    for _ in range(6):
-        chosen_index = random.randint(start, end)
-        
-        # Check if the chosen index is within 3 lines of any previous index
-        while any(abs(chosen_index - prev_index) <= 3 for prev_index in prev_indices):
+    if start is not None and end is not None:
+        for _ in range(6):
             chosen_index = random.randint(start, end)
-        
-      
-        # Insert new content at chosen index
-        lines.insert(chosen_index - 1, '<br><br><b>')
-        lines.insert(chosen_index + 1, '</b><ul> TESTING     <em></em></ul><br>')
-        
-        # Print the line with "previewsworld" and remove <br> from it
-        line_to_print = lines[chosen_index].replace("<br>", "")
-        print(line_to_print + " previewsworld \n")
-        
-        # Remove <br> from the chosen line
-        lines[chosen_index] = lines[chosen_index].replace("<br>", "")
-        
-        
-        
-        # Add chosen index to the list of previous indices
-        prev_indices.append(chosen_index)
-        
+            while any(abs(chosen_index - prev_index) <= 3 for prev_index in prev_indices):
+                chosen_index = random.randint(start, end)
+            lines.insert(chosen_index - 1, '<br><br><b>')
+            lines.insert(chosen_index + 1, '</b><ul> TESTING     <em></em></ul><br>')
+            line_to_print = lines[chosen_index].replace("<br>", "")
+            print(line_to_print + " previewsworld \n")
+            lines[chosen_index] = lines[chosen_index].replace("<br>", "")
+            prev_indices.append(chosen_index)
 
-        
 
 from datetime import datetime, timedelta
 import calendar
@@ -94,33 +78,24 @@ from datetime import datetime
 def runFile(uploadedFile):
     input_filename = uploadedFile
     output_filename = "processed_output.txt"
-    
+   
     try:
         with open(input_filename, "r") as input_file:
-            file_content = input_file.read()
-
-        # Get the current date in the format "DD MM YYYY"
+            file_content = input_file.readlines()  # Read lines into a list
         current_date = datetime.now().strftime("%d %m %Y")
-        
-        # Replace "DD MM YYYY" with the current date
-        file_content = file_content.replace("DD MM YYYY", next_wednesday())
-        
-        # Process the file content here
-        # For demonstration, let's just copy the content to the output file
+        file_content = [line.replace("DD MM YYYY", next_wednesday()) for line in file_content]  # Replace date
+        modified_lines = editor(file_content)  # Apply editor modifications
+        random_add(modified_lines)  # Apply random additions
+        modified_content = '\n'.join(modified_lines)  # Join lines into a single string
         with open(output_filename, "w") as output_file:
-            output_file.write(file_content)
-            
+            output_file.write(modified_content)  # Write modified content to the output file
+       
         print("File processed successfully.")
         print("Processed output saved in:", output_filename)
-        
     except FileNotFoundError:
         print("File not found:", input_filename)
     except Exception as e:
         print("An error occurred during file processing:", str(e))
 
-if __name__ == "__main__":
-    if len(sys.argv) != 2:
-        print("Usage: python script.py <filename>")
-    else:
-        uploadedFile = sys.argv[1]
-        runFile(uploadedFile)
+    print("End of function")  # Add this line to check if the function completes execution
+
