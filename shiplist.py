@@ -68,17 +68,37 @@ def random_add(lines):
         
 
         
-        
+  #      
+#def runFile(uploadedFile):
+ #   file = open_file(uploadedFile)
+  #  modified_lines = editor(file)
+   # random_add(modified_lines)
+
+    #for line in modified_lines:
+     #   print(line)
+
+
+
+import sys
+
 def runFile(uploadedFile):
-    file = open_file(uploadedFile)
-    modified_lines = editor(file)
-    random_add(modified_lines)
+    filename = uploadedFile
+    try:
+        with open(filename, "r") as file:
+            file_content = file.read()
+            # Process the file content here
+            print("File content:")
+            print(file_content)
+            # Call other functions as needed
+    except FileNotFoundError:
+        print("File not found:", filename)
 
-    for line in modified_lines:
-        print(line)
-
-        
-
+if __name__ == "__main__":
+    if len(sys.argv) != 2:
+        print("Usage: python script.py <filename>")
+    else:
+        uploadedFile = sys.argv[1]
+        runFile(uploadedFile)
 
 
         
