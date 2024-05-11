@@ -86,12 +86,12 @@ def runFile(uploadedFile):
     output_filename = "processed_output.txt"
     
     try:
-        with open(input_filename, "r") as input_file, open(output_filename, "w") as output_file:
-            # Read input file content
+        with open(input_filename, "r") as input_file:
             file_content = input_file.read()
-            
-            # Process the file content here
-            # For demonstration, let's just copy the content to the output file
+
+        # Process the file content here
+        # For demonstration, let's just copy the content to the output file
+        with open(output_filename, "w") as output_file:
             output_file.write(file_content)
             
         print("File processed successfully.")
@@ -99,6 +99,8 @@ def runFile(uploadedFile):
         
     except FileNotFoundError:
         print("File not found:", input_filename)
+    except Exception as e:
+        print("An error occurred during file processing:", str(e))
 
 if __name__ == "__main__":
     if len(sys.argv) != 2:
@@ -106,6 +108,7 @@ if __name__ == "__main__":
     else:
         uploadedFile = sys.argv[1]
         runFile(uploadedFile)
+
 
 
 
