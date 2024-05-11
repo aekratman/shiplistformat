@@ -82,16 +82,23 @@ def random_add(lines):
 import sys
 
 def runFile(uploadedFile):
-    filename = uploadedFile
+    input_filename = uploadedFile
+    output_filename = "processed_output.txt"
+    
     try:
-        with open(filename, "r") as file:
-            file_content = file.read()
+        with open(input_filename, "r") as input_file, open(output_filename, "w") as output_file:
+            # Read input file content
+            file_content = input_file.read()
+            
             # Process the file content here
-            print("File content:")
-            print(file_content)
-            # Call other functions as needed
+            # For demonstration, let's just copy the content to the output file
+            output_file.write(file_content)
+            
+        print("File processed successfully.")
+        print("Processed output saved in:", output_filename)
+        
     except FileNotFoundError:
-        print("File not found:", filename)
+        print("File not found:", input_filename)
 
 if __name__ == "__main__":
     if len(sys.argv) != 2:
@@ -99,6 +106,7 @@ if __name__ == "__main__":
     else:
         uploadedFile = sys.argv[1]
         runFile(uploadedFile)
+
 
 
         
