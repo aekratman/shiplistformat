@@ -82,7 +82,7 @@ def next_wednesday():
     # Get month name from month number
     month_name = calendar.month_name[next_wednesday_date.month]
     
-    return f"{month_name} {next_wednesday_date.day}, {next_wednesday_date.year}"
+    return f"{month_name} {next_wednesday_date.day} {next_wednesday_date.year}"
 
 
 
