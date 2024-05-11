@@ -62,14 +62,14 @@ def random_add(lines):
     start = None
     for i, line in enumerate(lines):
         if "Weekly Shiplist for Wednesday" in line:
-            start = i + 3
+            start = i + 6
             break
 
     # Find the index where "DC/Lunar Shiplist for Wednesday," appears
     end = None
     for i, line in enumerate(lines):
         if "DC/Lunar Shiplist for Wednesday," in line:
-            end = i
+            end = i - 4
             break
     prev_indices = []  # Keep track of previously chosen indices
     if start is not None and end is not None:
