@@ -80,6 +80,7 @@ def random_add(lines):
 
 
 import sys
+from datetime import datetime
 
 def runFile(uploadedFile):
     input_filename = uploadedFile
@@ -89,6 +90,12 @@ def runFile(uploadedFile):
         with open(input_filename, "r") as input_file:
             file_content = input_file.read()
 
+        # Get the current date
+        current_date = datetime.now().strftime("%Y-%m-%d")
+        
+        # Replace the existing date in the file content with the current date
+        file_content = file_content.replace("DD MM YYYY", current_date)
+        
         # Process the file content here
         # For demonstration, let's just copy the content to the output file
         with open(output_filename, "w") as output_file:
@@ -108,7 +115,6 @@ if __name__ == "__main__":
     else:
         uploadedFile = sys.argv[1]
         runFile(uploadedFile)
-
 
 
 
