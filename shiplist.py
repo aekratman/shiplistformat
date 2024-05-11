@@ -68,14 +68,21 @@ def random_add(lines):
         
 
         
-  #      
-#def runFile(uploadedFile):
- #   file = open_file(uploadedFile)
-  #  modified_lines = editor(file)
-   # random_add(modified_lines)
 
-    #for line in modified_lines:
-     #   print(line)
+from datetime import datetime, timedelta
+import calendar
+
+def next_wednesday():
+    today = datetime.today()
+    # Calculate the number of days until the next Wednesday (0=Monday, 1=Tuesday, ..., 6=Sunday)
+    days_until_wednesday = (2 - today.weekday() + 7) % 7
+    # Add the number of days until Wednesday to the current date
+    next_wednesday_date = today + timedelta(days=days_until_wednesday)
+    
+    # Get month name from month number
+    month_name = calendar.month_name[next_wednesday_date.month]
+    
+    return f"{month_name} {next_wednesday_date.day}, {next_wednesday_date.year}"
 
 
 
@@ -90,11 +97,11 @@ def runFile(uploadedFile):
         with open(input_filename, "r") as input_file:
             file_content = input_file.read()
 
-        # Get the current date
-        current_date = datetime.now().strftime("%Y-%m-%d")
+        # Get the current date in the format "DD MM YYYY"
+        current_date = datetime.now().strftime("%d %m %Y")
         
-        # Replace the existing date in the file content with the current date
-        file_content = file_content.replace("DD MM YYYY", current_date)
+        # Replace "DD MM YYYY" with the current date
+        file_content = file_content.replace("DD MM YYYY", next_wednesday())
         
         # Process the file content here
         # For demonstration, let's just copy the content to the output file
@@ -115,9 +122,3 @@ if __name__ == "__main__":
     else:
         uploadedFile = sys.argv[1]
         runFile(uploadedFile)
-
-
-
-        
-        
-        
