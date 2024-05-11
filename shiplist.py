@@ -76,6 +76,7 @@ import sys
 from datetime import datetime
 
 def runFile(uploadedFile):
+    print("Running.")
     input_filename = uploadedFile
     output_filename = "processed_output.txt"
    
