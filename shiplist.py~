@@ -33,12 +33,13 @@ def editor(lines):
                 print(f"Line replaced at index {i}: {new_line}")  # Debugging print
                 break
 
-    # Find the index where "DC/Lunar Shiplist for" appears
+    # Find the index where "DC/Lunar Shiplist for Wednesday," appears
     for d, line in enumerate(lines):
-        if "DC/Lunar Weekly Shiplist for" in line:  
+        if "DC/Lunar Shiplist for Wednesday," in line:  
             html_start2 = "<b><u><em>"    
             replace_line(lines, d, html_start2 + "DC/Lunar Shiplist for Wednesday, DD MM YYYY </b></em></u>")
             replace_line(lines, d + 1, "")
+
             print(lines[d])  # Print the modified line
             break
 
@@ -46,6 +47,7 @@ def editor(lines):
         if "DC/Lunar Shortages" in line:  
             html_start2 = "<b><u><em>"    
             replace_line(lines, t + 1, html_start2 + lines[t] + "</b></em></u>")
+
             print(lines[t])  # Print the modified line
             
         if "Delayed by Diamond" in line:  
@@ -77,48 +79,36 @@ def random_add(lines):
     # Find the index where "Weekly Shiplist for Wednesday" appears
     start = None
     for i, line in enumerate(lines):
-        if "Weekly Shiplist for" in line:
+        if "Weekly Shiplist for Wednesday" in line:
             start = i + 6
             break
 
-    # Find the index where "DC/Lunar Shiplist for" appears
+    # Find the index where "DC/Lunar Shiplist for Wednesday," appears
     end = None
     for i, line in enumerate(lines):
-        if "DC/Lunar Shiplist for" in line:
+        if "DC/Lunar Shiplist for Wednesday," in line:
             end = i - 4
             break
-
-
     prev_indices = []  # Keep track of previously chosen indices
-
     if start is not None and end is not None:
-    
         for _ in range(6):
-    
             chosen_index = random.randint(start, end)
             while any(abs(chosen_index - prev_index) <= 3 for prev_index in prev_indices):
                 chosen_index = random.randint(start, end)
-
             lines.insert(chosen_index - 1, '<br><br><b>')
-            lines.insert(chosen_index + 1, '</b><ul>\n<em>	</em></ul><br>')
-
+            lines.insert(chosen_index + 1, '</b><ul>\n<em>TESTING</em></ul><br>')
             line_to_print = lines[chosen_index].replace("<br>", "")
-            print(line_to_print + " previewsworld \n")
+           # print(line_to_print + " previewsworld \n")
             lines[chosen_index] = lines[chosen_index].replace("<br>", "")
             prev_indices.append(chosen_index)
-
-
 
     print("Random additions applied successfully.")
     return lines
 
 
-
 from datetime import datetime, timedelta
 import calendar
 
-
-# confirm date is correct lol
 def next_wednesday():
     today = datetime.today()
     # Calculate the number of days until the next Wednesday (0=Monday, 1=Tuesday, ..., 6=Sunday)
@@ -133,7 +123,7 @@ def next_wednesday():
 
 
 def runFile(uploadedFile):
-
+    #print("Running.")
     input_filename = uploadedFile
     output_filename = "processed_output.txt"
    
@@ -155,11 +145,14 @@ def runFile(uploadedFile):
         with open(output_filename, "w") as output_file:
             output_file.write(modified_content)  # Write modified content to the output file
        
+        #print("File processed successfully.")
+       # print("Processed output saved in:", output_filename)
     except FileNotFoundError:
         print("File not found:", input_filename)
     except Exception as e:
         print("An error occurred during file processing:", str(e))
 
+    #print("End of function")  # Add this line to check if the function completes execution
 
 if __name__ == "__main__":
     import sys

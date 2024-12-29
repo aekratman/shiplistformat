@@ -1,6 +1,6 @@
 <h1>Shiplist Formatting Tool</h1>
 
-<em>Written with the help of chatGPT to figure out more basics of Python, week of 5/10/24. </em>
+<em>Originally written week of 5/10/24. </em>
 
 This program takes a .txt file of Million Year Picnic's comic shiplist and formats it in proper HTML to be uploaded to [Million Year Picnic's site,]([url](https://www.themillionyearpicnic.com/)) on which I am an intern.
 
