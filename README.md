@@ -10,8 +10,4 @@ Holds the following functions of note:
 <li><b>next_wednesday</b>, which determines the closest Wednesday (AKA: when the comics come out) and formats the title to include it.</li>
 <li><b>runFile</b>, which takes the given .txt file, runs all of the above programs on it, and spits out a newly-formatted text file along with the randomly selected titles so I can add their features easily.</li></ul>
 
-This was mainly an exercise to get used to modifying Python-- again, I used chatGPT as a guiding hand-- and trying to get used to actually pushing things to Github. Overall, it's going to make my job much easier every week, so I am quite pleased!
-
-In the future, I am going to add some parts to <b>editor</b> so it will also format the comic shortages and delays.
-
-Cheers!
+This was mainly an exercise in efficiency. Overall, it's going to make my job much easier every week, so I am quite pleased!
