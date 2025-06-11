@@ -7,7 +7,7 @@ def open_file(filename):
 
 def replace_line(lines, line_number, new_line):
     if 0 < line_number <= len(lines):
-        lines[line_number - 1] = new_line + "\n"  # Adjust line number to 0-based index
+        lines[line_number - 1] = new_line + "\n"  # adjust the lines
     else:
         print("Invalid line number.")
 
@@ -35,20 +35,23 @@ def editor(lines):
 
     # Find the index where "DC/Lunar Shiplist for" appears
     for d, line in enumerate(lines):
-        if "DC/Lunar Weekly Shiplist for" in line:  
+        if "DC/Lunar Weekly Shiplist for" or "Lunar/DC" in line:  
+            print("DC/Lunar shiplist found.")
             html_start2 = "<b><u><em>"    
             replace_line(lines, d, html_start2 + "DC/Lunar Shiplist for Wednesday, DD MM YYYY </b></em></u>")
             replace_line(lines, d + 1, "")
             print(lines[d])  # Print the modified line
             break
 
-    for t, line in enumerate(lines):
+    for t, line in enumerate(lines): 
         if "DC/Lunar Shortages" in line:  
+            print("Shortages found.")
             html_start2 = "<b><u><em>"    
             replace_line(lines, t + 1, html_start2 + lines[t] + "</b></em></u>")
             print(lines[t])  # Print the modified line
             
-        if "Delayed by Diamond" in line:  
+        if "Delayed by Diamond" in line:
+            print("Delays found.")
             html_start2 = "<b><u><em>"    
             replace_line(lines, t + 1, html_start2 + "Delayed by Diamond </b></em></u>")
 
@@ -74,22 +77,24 @@ def editor(lines):
 
 
 def random_add(lines):
-    # Find the index where "Weekly Shiplist for Wednesday" appears
+    print("Running random additions:")
     start = None
     for i, line in enumerate(lines):
         if "Weekly Shiplist for" in line:
             start = i + 6
+            print("Start found at line", start)
             break
 
     # Find the index where "DC/Lunar Shiplist for" appears
     end = None
     for i, line in enumerate(lines):
-        if "DC/Lunar Shiplist for" in line:
+        if "DC/Lunar Shiplist" or "Lunar/DC Shiplist" in line:
             end = i - 4
+            print("End found at line", end)
             break
 
 
-    prev_indices = []  # Keep track of previously chosen indices
+    prev_indices = []  
 
     if start is not None and end is not None:
     
