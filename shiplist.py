@@ -15,27 +15,29 @@ def editor(lines):
     modified_lines = []  # Initialize an empty list to store modified lines
     index_shiplist = -1
 
-    # Find the index where "Weekly Shiplist for Wednesday" appears
+
+
     for i, line in enumerate(lines):
-        if "Weekly Shiplist for Wednesday" in line:
+        if "Penguin Random House Shiplist for Wednesday" in line:
                 index_shiplist = i  # Store the index of the first occurrence
                        # Replace the line with the desired format
                 print(lines[i])
                 html_start = "<b><u><em>"
-                new_line = "Weekly Shiplist for Wednesday, DD MM YYYY"
+                new_line = "Penguin Random House Shiplist for Wednesday, DD MM YYYY"
                 lines.insert(i + 2, '</b></u></em>')     
                 replace_line(lines, i, html_start + new_line)
                 replace_line(lines, i + 1, "")
                 for i, line in enumerate(lines):
-                    if i != index_shiplist and "Weekly Shiplist for Wednesday" in line:
+                    if i != index_shiplist and "Penguin Random House Shiplist for Wednesday" in line:
                         replace_line(lines, i, "")
                         break
+                print("We are updatin'!")
                 print(f"Line replaced at index {i}: {new_line}")  # Debugging print
                 break
 
     # Find the index where "DC/Lunar Shiplist for" appears
     for d, line in enumerate(lines):
-        if "DC/Lunar Weekly Shiplist for" or "Lunar/DC" in line:  
+        if "DC/Lunar Shiplist for Wednesday" or "Lunar/DC" in line:  
             print("DC/Lunar shiplist found.")
             html_start2 = "<b><u><em>"    
             replace_line(lines, d, html_start2 + "DC/Lunar Shiplist for Wednesday, DD MM YYYY </b></em></u>")
@@ -57,12 +59,30 @@ def editor(lines):
 
             print(lines[t + 1])  # Print the modified line
             
-        if "Diamond Shortages" in line:  
+        if "Penguin Random House Shortages" in line:  
             html_start2 = "<b><u><em>"    
             replace_line(lines, t + 1, html_start2 + "Diamond Shortages </b></em></u>")
 
             print(lines[t + 1])  # Print the modified line
-            
+
+        if "PRH Comics:" in line:  
+            html_start2 = "<b><u><em>"    
+            replace_line(lines, t + 1, html_start2 + "PRH Comics: </b></em></u>")
+
+            print(lines[t + 1])  # Print the modified line
+
+        if "PRH Manga:" in line:  
+            html_start2 = "<b><u><em>"    
+            replace_line(lines, t + 1, html_start2 + "PRH Manga: </b></em></u>")
+
+            print(lines[t + 1])  # Print the modified line         
+
+        if "PRH YA Books:" in line:  
+            html_start2 = "<b><u><em>"    
+            replace_line(lines, t + 1, html_start2 + "PRH YA Books: </b></em></u>")
+
+            print(lines[t + 1])  # Print the modified line 
+
 
     # Add '<br>' to the beginning of lines if not already present
     for line in lines:  
@@ -86,9 +106,10 @@ def random_add(lines):
             break
 
     # Find the index where "DC/Lunar Shiplist for" appears
+    
     end = None
     for i, line in enumerate(lines):
-        if "DC/Lunar Shiplist" or "Lunar/DC Shiplist" in line:
+        if "DC/Lunar Shiplist" in line or "Lunar/DC Shiplist" in line:
             end = i - 4
             print("End found at line", end)
             break
