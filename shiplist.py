@@ -100,7 +100,7 @@ def random_add(lines):
     print("Running random additions:")
     start = None
     for i, line in enumerate(lines):
-        if "Weekly Shiplist for" in line:
+        if "Penguin Random House Shiplist" in line:
             start = i + 6
             print("Start found at line", start)
             break
@@ -110,33 +110,42 @@ def random_add(lines):
     end = None
     for i, line in enumerate(lines):
         if "DC/Lunar Shiplist" in line or "Lunar/DC Shiplist" in line:
-            end = i - 4
+            end = i + 14;
             print("End found at line", end)
             break
 
 
     prev_indices = []  
 
-    if start is not None and end is not None:
-    
-        for _ in range(6):
-    
+    for _ in range(6):
+        while True:
             chosen_index = random.randint(start, end)
-            while any(abs(chosen_index - prev_index) <= 3 for prev_index in prev_indices):
-                chosen_index = random.randint(start, end)
+            line_text = lines[chosen_index].strip()
 
-            lines.insert(chosen_index - 1, '<br><br><b>')
-            lines.insert(chosen_index + 1, '</b><ul>\n<em>	</em></ul><br>')
+            # Ensure index is not too close to previous ones, not a forbidden line, and not blank
+            if (line_text
+                and all(abs(chosen_index - prev_index) > 3 for prev_index in prev_indices)
+                and line_text not in [
+                    "DC/Lunar Shiplist for Wednesday",
+                    "</b><ul>",
+                    "<em>	</em></ul> previewsworld",
+                    "previewsworld",
+                    " "
+                ]):
+                break  # Valid line found
 
-            line_to_print = lines[chosen_index].replace("<br>", "")
-            print(line_to_print + " previewsworld \n")
-            lines[chosen_index] = lines[chosen_index].replace("<br>", "")
-            prev_indices.append(chosen_index)
+        lines.insert(chosen_index - 1, '<br><br><b>')
+        lines.insert(chosen_index + 1, '</b><ul>\n<em>	</em></ul><br>')
 
-
+        line_to_print = lines[chosen_index].replace("<br>", "")
+        print(line_to_print + " previewsworld \n")
+        lines[chosen_index] = lines[chosen_index].replace("<br>", "")
+        prev_indices.append(chosen_index)
 
     print("Random additions applied successfully.")
     return lines
+
+
 
 
 
