@@ -7,20 +7,21 @@ def open_file(filename):
 
 def replace_line(lines, line_number, new_line):
     if 0 < line_number <= len(lines):
-        lines[line_number - 1] = new_line + "\n"  # adjust the lines
+        lines[line_number - 1] = new_line + "\n"  
     else:
         print("Invalid line number.")
 
 def editor(lines):
-    modified_lines = []  # Initialize an empty list to store modified lines
+    modified_lines = [] 
     index_shiplist = -1
 
 
 
     for i, line in enumerate(lines):
         if "Penguin Random House Shiplist for Wednesday" in line:
-                index_shiplist = i  # Store the index of the first occurrence
-                       # Replace the line with the desired format
+                index_shiplist = i  
+        
+        # Replace the line with the desired format
                 print(lines[i])
                 html_start = "<b><u><em>"
                 new_line = "Penguin Random House Shiplist for Wednesday, DD MM YYYY"
@@ -35,7 +36,7 @@ def editor(lines):
                 print(f"Line replaced at index {i}: {new_line}")  # Debugging print
                 break
 
-    # Find the index where "DC/Lunar Shiplist for" appears
+    # title index
     for d, line in enumerate(lines):
         if "DC/Lunar Shiplist for Wednesday" or "Lunar/DC" in line:  
             print("DC/Lunar shiplist found.")
@@ -84,7 +85,7 @@ def editor(lines):
             print(lines[t + 1])  # Print the modified line 
 
 
-    # Add '<br>' to the beginning of lines if not already present
+    # Add '<br>' to the beginning of lines if not already present!
     for line in lines:  
         if not line.strip().startswith('<br>'):
             modified_lines.append('<br>' + line.strip())
@@ -105,8 +106,8 @@ def random_add(lines):
             print("Start found at line", start)
             break
 
-    # Find the index where "DC/Lunar Shiplist for" appears
-    
+
+# find the end of editable titles    
     end = None
     for i, line in enumerate(lines):
         if "DC/Lunar Shiplist" in line or "Lunar/DC Shiplist" in line:
@@ -156,12 +157,10 @@ import calendar
 # confirm date is correct lol
 def next_wednesday():
     today = datetime.today()
-    # Calculate the number of days until the next Wednesday (0=Monday, 1=Tuesday, ..., 6=Sunday)
     days_until_wednesday = (2 - today.weekday() + 7) % 7
-    # Add the number of days until Wednesday to the current date
     next_wednesday_date = today + timedelta(days=days_until_wednesday)
     
-    # Get month name from month number
+    # month name from month number
     month_name = calendar.month_name[next_wednesday_date.month]
     
     return f"{month_name} {next_wednesday_date.day} {next_wednesday_date.year}"
@@ -174,21 +173,20 @@ def runFile(uploadedFile):
    
     try:
         with open(input_filename, "r") as input_file:
-            file_content = input_file.readlines()  # Read lines into a list
+            file_content = input_file.readlines() 
         current_date = datetime.now().strftime("%d %m %Y")
         
-        # Apply editor modifications
+        # editor mods
         modified_lines = editor(file_content)  
         
-        # Apply random additions
+        # random mods
         modified_lines = random_add(modified_lines)  
         
-        # Replace "DD MM YYYY" with the next Wednesday's date
         modified_lines = [line.replace("DD MM YYYY", next_wednesday()) for line in modified_lines]
 
-        modified_content = '\n'.join(modified_lines)  # Join lines into a single string
+        modified_content = '\n'.join(modified_lines) 
         with open(output_filename, "w") as output_file:
-            output_file.write(modified_content)  # Write modified content to the output file
+            output_file.write(modified_content) 
        
     except FileNotFoundError:
         print("File not found:", input_filename)
